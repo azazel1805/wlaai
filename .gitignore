@@ -1,0 +1,128 @@
+# --- Python ---
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+# Usually no need to bundle scripts like this since we are deploying runtime
+# *.manifest
+# *.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# --- Virtual Environment ---
+# Replace 'venv' with the actual name of your virtual environment directory if different
+# Common names: venv, env, .venv, .env, virtualenv, ENV, env.bak, venv.bak
+venv/
+env/
+.venv/
+.env/  # Be careful if you use '.env/' as folder name, '.env' file is handled separately
+ENV/
+env.bak/
+venv.bak/
+
+# --- Flask ---
+instance/   # Flask instance folder (often used for config/db outside version control)
+*.sqlite
+*.sqlite3   # Ignore SQLite databases if used locally for development
+
+# --- Secrets ---
+# Ignore files containing sensitive credentials (API keys, passwords, etc.)
+# CRITICAL: Ensure your .env file is listed here!
+.env
+*.env
+.env.*
+secrets.py # If you have secrets hardcoded (bad practice, use .env!)
+
+# --- OS generated files ---
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+# Thumbnails
+._*
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+# Windows
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# --- Editor / IDE ---
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# PyCharm
+.idea/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# --- Other ---
+# Log files
+*.log
+logs/
+*.log.*
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# If you generate audio files locally for testing (unlikely with current code)
+# *.mp3
+# *.wav
+# audio_output/

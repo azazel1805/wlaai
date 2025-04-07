@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wimbledon AI Suite!</title> <!-- Added flair -->
+
+    <!-- Favicon Link (Ensure 'favicon.png' is in your static folder) -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Your Stylesheet -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👑</text></svg>">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+    <header>
+        <h1>Wimbledon AI Suite</h1>
+    </header>
+
+    <div class="tab-container">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="corrector">Text Corrector</button>
+            <button class="tab-button" data-tab="topic-generator">Grammar Aid</button>
+            <button class="tab-button" data-tab="vocab-helper">Vocabulary Aid</button>
+            <button class="tab-button" data-tab="paraphraser">Paraphraser</button>
+            <button class="tab-button" data-tab="level-generator">Text Generator</button>
+        </div>
+
+        <!-- Corrector Tab -->
+        <div class="tab-content active" id="corrector">
+            <h2>Text Corrector</h2>
+            <p>Enter text below to find mistakes and get detailed feedback.</p>
+            <textarea id="text-to-correct" rows="8" placeholder="Enter your text here..."></textarea>
+            <button id="corrector-button" class="action-button">Do the magic!</button>
+             <!-- MODIFIED: Removed inner spinner icon -->
+            <div id="corrector-loading" class="loading" style="display: none;">Wait for it... </div>
+            <div id="corrector-error" class="error" style="display: none;"></div> <!-- Error icon added by CSS -->
+            <div id="corrector-output" class="output-area" style="display: none;">
+                 <div id="corrected-text-area">
+                     <h3>Corrected Text:</h3>
+                     <p id="corrected-text" class="formatted-output"></p>
+                 </div>
+                 <hr>
+                 <div id="correction-feedback-area">
+                      <h3>Feedback:</h3>
+                      <ul id="correction-feedback"></ul>
+                 </div>
+            </div>
+        </div>
+
+        <!-- Topic Generator Tab -->
+        <div class="tab-content" id="topic-generator">
+            <h2>Grammar Aid</h2>
+            <p>Select a level and topic to get an explanation and practice questions.</p>
+            <div class="controls">
+                 <label for="topic-level">Level:</label>
+                 <select id="topic-level">
+                     {% for level in levels %}
+                         <option value="{{ level }}">{{ level }}</option>
+                     {% endfor %}
+                 </select>
+                 <label for="topic-select">Topic:</label>
+                 <select id="topic-select">
+                     <!-- Options will be populated by JS -->
+                 </select>
+                 <button id="topic-generator-button" class="action-button">Help Me!</button>
+            </div>
+            <!-- MODIFIED: Removed inner spinner icon -->
+            <div id="topic-generator-loading" class="loading" style="display: none;">Wait for it... </div>
+            <div id="topic-generator-error" class="error" style="display: none;"></div> <!-- Error icon added by CSS -->
+            <div id="topic-generator-output" class="output-area" style="display: none;">
+                 <h3>Explanation:</h3>
+                 <div id="topic-explanation" class="formatted-output"></div>
+                 <h3>Questions:</h3>
+                 <form id="topic-questions-form"></form>
+                 <button id="check-topic-answers-button" class="action-button" style="display: none;">Check Answers</button>
+                 <div id="topic-feedback" class="feedback-area"></div>
+            </div>
+        </div>
+
+        <!-- Vocabulary Helper Tab -->
+        <div class="tab-content" id="vocab-helper">
+            <h2>Vocabulary Helper</h2>
+            <p>Enter a word to get detailed information.</p>
+            <div class="controls">
+                <input type="text" id="word-input" placeholder="Enter a word..." style="flex-grow: 1;">
+                <button id="vocab-helper-button" class="action-button">Impress me!</button>
+            </div>
+            <!-- MODIFIED: Removed inner spinner icon -->
+            <div id="vocab-helper-loading" class="loading" style="display: none;">Wait for it... </div>
+            <div id="vocab-helper-error" class="error" style="display: none;"></div> <!-- Error icon added by CSS -->
+            <div id="vocab-helper-output" class="output-area formatted-output" style="display: none;">
+                <!-- Info will be displayed here -->
+            </div>
+        </div>
+
+        <!-- Paraphraser Tab -->
+        <div class="tab-content" id="paraphraser">
+            <h2>Paraphraser</h2>
+            <p>Enter text and choose a style to get paraphrased versions.</p>
+            <textarea id="text-to-paraphrase" rows="5" placeholder="Enter text to rephrase..."></textarea>
+            <div class="controls">
+                <label for="paraphrase-style">Style:</label>
+                <select id="paraphrase-style">
+                     {% for style in paraphrase_styles %}
+                         <option value="{{ style }}">{{ style }}</option>
+                     {% endfor %}
+                </select>
+                <button id="paraphraser-button" class="action-button">Paraphrase</button>
+            </div>
+             <!-- MODIFIED: Removed inner spinner icon -->
+            <div id="paraphraser-loading" class="loading" style="display: none;">Rephrasing... </div>
+            <div id="paraphraser-error" class="error" style="display: none;"></div> <!-- Error icon added by CSS -->
+            <div id="paraphraser-output" class="output-area" style="display: none;">
+                <h3>Paraphrased Versions:</h3>
+                <ul id="paraphrase-list"></ul>
+            </div>
+        </div>
+
+         <!-- Level Generator Tab -->
+         <div class="tab-content" id="level-generator">
+            <h2>Level-Based Text Generator</h2>
+            <p>Select a level to generate a text with comprehension questions.</p>
+            <div class="controls">
+                 <label for="level-gen-level">Level:</label>
+                 <select id="level-gen-level">
+                     {% for level in levels %}
+                         <option value="{{ level }}">{{ level }}</option>
+                     {% endfor %}
+                 </select>
+                 <button id="level-generator-button" class="action-button">Generate Text</button>
+            </div>
+            <!-- MODIFIED: Removed inner spinner icon -->
+            <div id="level-generator-loading" class="loading" style="display: none;">Generating... </div>
+            <div id="level-generator-error" class="error" style="display: none;"></div> <!-- Error icon added by CSS -->
+            <div id="level-generator-output" class="output-area" style="display: none;">
+                 <h3>Generated Text:</h3>
+                 <div id="level-gen-text" class="formatted-output"></div>
+                 <hr>
+                 <h3>Questions:</h3>
+                 <form id="level-gen-questions-form"></form>
+                 <button id="check-level-gen-answers-button" class="action-button" style="display: none;">Check Answers</button>
+                 <div id="level-gen-feedback" class="feedback-area"></div>
+            </div>
+        </div>
+
+    </div> <!-- End Tab Container -->
+
+    <!-- Chatbot Bubble -->
+    <!-- OPTIONAL MODIFICATION: Change fa-comment-dots to fa-crown if desired -->
+    <div id="chat-bubble">
+        <i class="fas fa-comment-dots"></i> <!-- Or <i class="fas fa-crown"></i> -->
+    </div>
+
+    <!-- Chatbot Window (Initially Hidden) -->
+    <div id="chat-window" style="display: none;">
+        <div id="chat-header">
+            Ada
+            <button id="close-chat" title="Close Chat"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chat-history">
+            <!-- Chat messages appear here -->
+            <!-- Bot messages will get icon via CSS -->
+            <div class="message bot-message">Hello! How can I help you today?</div>
+        </div>
+        <div id="chat-status-area">
+             <!-- MODIFIED: Removed inner spinner icon -->
+             <div id="chat-loading" class="loading" style="display: none; margin: 5px; padding: 5px; font-size: 0.9em;">Thinking... </div>
+             <div id="chat-error" class="error" style="display: none; margin: 5px; padding: 5px; font-size: 0.9em;"></div> <!-- Error icon added by CSS -->
+        </div>
+        <div id="chat-input-area">
+            <button id="mic-button" title="Use Microphone"><i class="fas fa-microphone"></i></button>
+            <input type="text" id="chat-input" placeholder="Type your message or use mic...">
+            <button id="send-chat-button" title="Send Message"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Hidden Audio Player for TTS -->
+    <audio id="tts-audio" style="display: none;"></audio>
+
+    <!-- Define JS variables passed from Flask *before* loading script.js -->
+    <script>
+        const grammarTopicsData = {{ grammar_topics | tojson }};
+        const levels = {{ levels | tojson }};
+        const elevenlabsClientAvailable = {{ elevenlabs_ready | tojson }};
+        console.log("ElevenLabs Available (from HTML):", elevenlabsClientAvailable); // Debugging
+    </script>
+    <!-- Load the main script file -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
