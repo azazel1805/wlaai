@@ -5,7 +5,7 @@
 /* --- Theme Colors: Sophisticated YELLOW/Gold & White Palette --- */
 :root {
     /* Core Palette */
-    --primary-accent: #D4AF37;  /* Muted, sophisticated gold/yellow (MAIN INTERACTIVE COLOR) */
+    --primary-accent: #f0f00a;  /* Muted, sophisticated gold/yellow (MAIN INTERACTIVE COLOR) */
     --primary-accent-darker: #B89B5F; /* Darker gold for hover states */
     --dark-text-contrast: #2F2F2F; /* Off-black for high contrast text */
     --main-bg: #FAF8F2;         /* Warm off-white for main background */
