@@ -1,738 +1,663 @@
 /* --- Import Google Fonts --- */
-/* Summoning Lato & Merriweather from the Google Font dimension. Hope they arrive okay. */
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap');
 
-/* --- Theme Colors: Sophisticated YELLOW/Gold & White Palette --- */
+/* --- Theme Colors: Refined Gold & White Palette --- */
 :root {
     /* Core Palette */
-    --primary-accent: #f0f00a;  /* Muted, sophisticated gold/yellow (MAIN INTERACTIVE COLOR) */
-    --primary-accent-darker: #B89B5F; /* Darker gold for hover states */
-    --dark-text-contrast: #2F2F2F; /* Off-black for high contrast text */
-    --main-bg: #FAF8F2;         /* Warm off-white for main background */
-    --container-bg: #FFFFFF;    /* Pure white for cards, inputs, etc. */
-    --secondary-text: #666666;  /* Medium grey for secondary info */
-    --medium-neutral: #A9A294;  /* Warm grey for inactive elements */
-    --light-neutral: #E0DBCF;   /* Lighter warm grey for subtle borders, dividers */
-    --output-bg: #FFFDF5;       /* Very pale cream/yellow for output areas */
-    --white: #FFFFFF;           /* Pure white (mainly for contrast checks) */
+    --primary-accent: #e4c06a;         /* Softer, richer gold */
+    --primary-accent-darker: #c7a34d;    /* Darker gold for hover/active */
+    --dark-text-contrast: #2a2a2a;    /* Very dark grey, slightly softer than black */
+    --main-bg: #fdfcf7;                /* Clean, slightly warm off-white */
+    --container-bg: #ffffff;           /* Pure white for cards, inputs */
+    --secondary-text: #555555;         /* Darker medium grey for readability */
+    --medium-neutral: #b0a99a;         /* Muted warm grey for borders/inactive */
+    --light-neutral: #e5e1d7;          /* Lighter warm grey for subtle dividers */
+    --output-bg: #fffefa;              /* Very pale yellow/cream for output areas */
+    --white: #FFFFFF;
 
-    /* Standard Feedback Colors (Backgrounds slightly adjusted for theme) */
-    --error-red: #D32F2F;       /* Standard error red */
-    --error-red-bg: #FFEBEE;    /* Standard pale red background */
-    --success-green: #2E7D32;   /* Standard success green */
-    --success-green-bg: #E8F5E9;  /* Standard pale green background */
+    /* Feedback Colors */
+    --error-red: #c62828;              /* Slightly deeper red */
+    --error-red-bg: #fde8e8;           /* Softer pale red */
+    --success-green: #2e7d32;          /* Standard success green */
+    --success-green-bg: #eaf6eb;         /* Softer pale green */
+
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(42, 42, 42, 0.06);
+    --shadow-md: 0 4px 10px rgba(42, 42, 42, 0.08);
+    --shadow-lg: 0 8px 25px rgba(42, 42, 42, 0.1);
+
+    /* Transitions */
+    --transition-fast: 0.15s ease-in-out;
+    --transition-medium: 0.25s ease-in-out;
+
+    /* Borders */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+
+    /* Font Stacks */
+    --font-sans: 'Lato', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-serif: 'Merriweather', Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: 'SF Mono', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
 }
 
-/* --- General Styles --- */
-/* Let's make this look like a website, shall we? */
+/* --- General Styles & Resets --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: 'Lato', sans-serif; /* Lato: because we need *some* sanity. */
-    margin: 0; /* No weird gaps around the edges, please. */
-    background-color: var(--main-bg); /* Slathering the page in warm off-white */
-    color: var(--dark-text-contrast); /* Making sure people can actually read. Bold move. */
-    line-height: 1.6; /* Giving the text room to breathe. Don't suffocate the words! */
-    font-size: 16px; /* The 'just right' porridge size of fonts. Probably. */
+    font-family: var(--font-sans);
+    margin: 0;
+    background-color: var(--main-bg);
+    color: var(--dark-text-contrast);
+    line-height: 1.65; /* Slightly increased line height */
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
+/* --- Typography --- */
+/* Assume header is part of the main application content */
 header {
-    background-color: var(--primary-accent); /* Drenching the top in Muted Gold! */
-    color: var(--dark-text-contrast); /* Dark text provides contrast on this gold */
-    padding: 1.5rem 2rem; /* Padding: because elements need personal space too. */
-    text-align: center; /* Let the title bask in the center-stage glory. */
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); /* A subtle shadow, hinting at depth. Or maybe just dust. */
-    border-bottom: 4px solid var(--dark-text-contrast); /* Dark border for contrast */
+    background-color: var(--primary-accent);
+    color: var(--dark-text-contrast);
+    padding: 1.2rem 2rem; /* Slightly reduced padding */
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    border-bottom: 3px solid var(--primary-accent-darker); /* Darker gold border */
+    margin-bottom: 2rem; /* Add space below app header */
 }
 
-h1 {
-    font-family: 'Merriweather', serif; /* Merriweather: Making the main title feel important. And slightly old-timey. */
-    margin: 0; /* No extra space needed, it's already shouting. */
-    font-size: 2.5em; /* BIG. LOUD. IN CHARGE. */
-    font-weight: 700; /* Maximum boldness! */
-    letter-spacing: 1px; /* Spacing out the letters slightly, for ~drama~ */
-    color: var(--dark-text-contrast); /* Match header text color */
-}
-/* Suggestion: Change H1 in index.html title */
-
-h2 {
-    font-family: 'Merriweather', serif; /* Serif for section titles too, keepin' it classy. */
-    color: var(--dark-text-contrast); /* Use the main dark text for headings */
-    border-bottom: 2px solid var(--primary-accent); /* Muted gold underline */
-    padding-bottom: 0.6rem; /* Space between text and the gold line. Aesthetic. */
-    margin-top: 2rem; /* Pushing down the content below. Shove! */
-    margin-bottom: 1.5rem; /* Space before the *next* bit starts. Breathe. */
-    font-size: 1.8em; /* Important, but not H1 important. Know your place, H2. */
-    font-weight: 700; /* Still pretty bold though. */
+h1 { /* Main Application Title (if used) */
+    font-family: var(--font-serif);
+    margin: 0;
+    font-size: 2.2em; /* Adjusted size */
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--dark-text-contrast);
 }
 
-h3 {
-    font-family: 'Merriweather', serif; /* Okay, Merriweather, you're getting a workout. */
-    color: var(--dark-text-contrast); /* Main dark text for H3 too */
-    opacity: 0.9; /* Slightly faded, like a cherished memory or a cheap print. */
-    margin-top: 1.5rem;
-    margin-bottom: 0.8rem; /* Less spacing, H3 is less demanding. */
-    font-size: 1.4em; /* Smaller still. The quiet cousin. */
-    font-weight: 400; /* Not bold. Calm down, H3. */
+h2 { /* Section Titles */
+    font-family: var(--font-serif);
+    color: var(--dark-text-contrast);
+    border-bottom: 2px solid var(--primary-accent);
+    padding-bottom: 0.5rem;
+    margin: 2rem 0 1.5rem 0; /* Standardize margins */
+    font-size: 1.7em; /* Adjusted size */
+    font-weight: 700;
+}
+
+h3 { /* Sub-Section Titles */
+    font-family: var(--font-sans); /* Using Lato for H3 */
+    color: var(--secondary-text); /* More subtle color */
+    margin: 1.8rem 0 1rem 0; /* Adjusted margins */
+    font-size: 1.3em;
+    font-weight: 700; /* Bold Lato */
+}
+
+p {
+    margin-bottom: 1rem; /* Default spacing for paragraphs */
+}
+
+a {
+    color: var(--primary-accent-darker);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+a:hover {
+    color: var(--primary-accent);
+    text-decoration: underline;
+}
+
+/* --- Layout Containers --- */
+.tab-container {
+    max-width: 980px; /* Slightly wider */
+    margin: 2rem auto;
+    padding: 2rem 2.5rem; /* Adjusted padding */
+    background-color: var(--container-bg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--light-neutral);
 }
 
 /* --- Tab System --- */
-/* Let's get tab-ulous! Or something. */
-.tab-container {
-    max-width: 950px; /* Containing the chaos. Mostly. */
-    margin: 2.5rem auto; /* Centered, with space top/bottom. Like a diva. */
-    padding: 2rem 2.5rem; /* Room to breathe inside the box. */
-    background-color: var(--container-bg); /* Clean white for the main card */
-    border-radius: 10px; /* Softening those harsh corners. Ahh, smooth. */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Look, it's floating! Kinda. */
-    border: 1px solid var(--light-neutral); /* Subtle warm grey border */
-}
-
 .tab-buttons {
-    display: flex; /* Lining up the buttons like little soldiers. */
-    border-bottom: 2px solid var(--light-neutral); /* Underlining the squad with warm grey */
-    margin-bottom: 2rem; /* Push the content down! Make way for the buttons! */
-    overflow-x: auto; /* If too many tabs, let them scroll sideways. Weeee! */
-    padding-bottom: 5px; /* Space for the active border to appear without jumping. Sneaky. */
+    display: flex;
+    border-bottom: 1px solid var(--light-neutral); /* Thinner border */
+    margin-bottom: 1.8rem; /* Adjusted margin */
+    overflow-x: auto;
+    padding-bottom: 0; /* No extra padding needed */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: var(--medium-neutral) var(--main-bg); /* For Firefox */
 }
+.tab-buttons::-webkit-scrollbar { height: 6px; } /* For Chrome/Safari */
+.tab-buttons::-webkit-scrollbar-track { background: var(--main-bg); }
+.tab-buttons::-webkit-scrollbar-thumb { background-color: var(--medium-neutral); border-radius: 3px; }
 
 .tab-button {
-    font-family: 'Lato', sans-serif; /* Back to sensible Lato for buttons. */
-    padding: 0.8rem 1.5rem; /* Comfy padding for clicking. */
-    cursor: pointer; /* The finger-pointer thingy. Essential. */
-    border: none; /* No default weird button borders. */
-    background-color: transparent; /* Invisible background! Spooky! */
-    font-size: 1.05em; /* Slightly bigger, easier to hit. */
-    font-weight: 700; /* BOLD TABS! */
-    color: var(--medium-neutral); /* Start with warm grey */
-    border-bottom: 4px solid transparent; /* Reserving space for the active indicator line. */
-    margin-bottom: -2px; /* Nudging it down to overlap the container border slightly. Tricky! */
-    transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease; /* Smooth moves. */
-    white-space: nowrap; /* Don't let the text wrap! Tabs should be tabs! */
-    flex-shrink: 0; /* Don't squish the tabs on small screens, let them scroll. */
+    font-family: var(--font-sans);
+    padding: 0.8rem 1.5rem; /* Comfortable padding */
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-size: 1em;
+    font-weight: 700;
+    color: var(--secondary-text); /* Start with secondary text */
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px; /* Overlap container border */
+    transition: color var(--transition-medium), border-color var(--transition-medium), background-color var(--transition-fast);
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative; /* For focus state */
+    text-align: center;
 }
-
 .tab-button:hover {
-    color: var(--primary-accent); /* Ooh, a potential click! Gold text on hover */
-    background-color: rgba(212, 175, 55, 0.05); /* Very subtle gold tint */
+    color: var(--primary-accent-darker);
+    background-color: rgba(228, 192, 106, 0.07); /* Very subtle gold tint */
 }
-
 .tab-button.active {
-    color: var(--primary-accent); /* I'M PICKED! LOOK AT ME! Gold text */
-    border-bottom-color: var(--primary-accent); /* The glorious underline of victory! Gold! */
-    font-weight: 700; /* Already bold, but let's just... state it again. */
+    color: var(--primary-accent-darker);
+    border-bottom-color: var(--primary-accent);
+}
+.tab-button:focus-visible { /* Modern focus indicator */
+    outline: 2px solid var(--primary-accent);
+    outline-offset: 2px;
+    border-radius: var(--border-radius-sm);
 }
 
-.tab-content {
-    display: none; /* Hide! Like a ninja. */
-}
-
-.tab-content.active {
-    display: block; /* Okay, ninja, reveal yourself! */
-    animation: fadeIn 0.5s ease-in-out; /* Poof! Appearing gracefully. */
-}
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.4s ease-out forwards; } /* Add forwards */
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); } /* Starting invisible and slightly lower */
-    to { opacity: 1; transform: translateY(0); } /* Ending visible and in place. Magic! */
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Form Elements & Buttons --- */
-/* The bits where users actually *do* stuff. Handle with care. */
-textarea, input[type="text"], select {
-    width: 100%; /* Take up all the space! Greedy inputs. */
-    padding: 0.9rem 1rem; /* Making sure the text isn't squished against the edges. */
-    margin-bottom: 1.2rem; /* Space below each input. Breathe out. */
-    border: 1px solid var(--light-neutral); /* Light warm grey border */
-    border-radius: 6px; /* Slightly rounded corners. Much friendlier. */
-    font-size: 1em; /* Standard text size, please. */
-    font-family: 'Lato', sans-serif; /* Sensible Lato again. */
-    box-sizing: border-box; /* Padding and border included in the width. No surprises. */
-    background-color: var(--container-bg); /* White background for inputs */
-    color: var(--dark-text-contrast); /* Dark text */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions when focused. */
+/* --- Form Elements --- */
+textarea,
+input[type="text"],
+input[type="email"], /* Add other types if used */
+input[type="password"],
+select {
+    display: block; /* Ensure block display */
+    width: 100%;
+    padding: 0.8rem 1rem; /* Consistent padding */
+    margin-bottom: 1rem;
+    border: 1px solid var(--medium-neutral); /* Slightly darker border initially */
+    border-radius: var(--border-radius-md);
+    font-size: 1em;
+    font-family: var(--font-sans);
+    box-sizing: border-box;
+    background-color: var(--container-bg);
+    color: var(--dark-text-contrast);
+    transition: border-color var(--transition-medium), box-shadow var(--transition-medium);
+    appearance: none; /* Remove default styling */
+    line-height: 1.5; /* Ensure consistent line height */
 }
 
-textarea:focus, input[type="text"]:focus, select:focus {
-    outline: none; /* Ditch the default browser outline. It's usually ugly. */
-    border-color: var(--primary-accent); /* Highlight with gold */
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2); /* Subtle gold glow */
+textarea:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary-accent);
+    box-shadow: 0 0 0 3px rgba(228, 192, 106, 0.3); /* Adjusted focus ring */
+}
+
+textarea::placeholder,
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder {
+    color: var(--medium-neutral);
+    opacity: 1;
 }
 
 textarea {
-    min-height: 120px; /* Start with a decent height for ramblings. */
-    resize: vertical; /* Let users make it taller, but not wider. Chaos control. */
+    min-height: 130px; /* Slightly taller */
+    resize: vertical;
+}
+
+select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23555555'%3E%3Cpath fill-rule='evenodd' d='M4.22 6.22a.75.75 0 011.06 0L8 8.94l2.72-2.72a.75.75 0 111.06 1.06l-3.25 3.25a.75.75 0 01-1.06 0L4.22 7.28a.75.75 0 010-1.06z' clip-rule='evenodd' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center;
+    background-size: 1em 1em;
+    padding-right: 2.8rem; /* Ensure space for arrow */
 }
 
 .controls {
-    display: flex; /* Line things up horizontally. */
-    align-items: center; /* Vertically align them nicely. */
-    gap: 1rem; /* Space between the items in the controls row. */
-    margin-bottom: 1.5rem; /* Space below the whole controls group. */
-    flex-wrap: wrap; /* If they run out of space, wrap to the next line. Be flexible! */
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
 }
-
 .controls label {
-     font-weight: 700; /* Bold labels, gotta know what you're filling in. */
-     color: var(--secondary-text); /* Use secondary text color for labels */
-     font-size: 0.95em; /* Slightly smaller than main text. */
-     margin-right: 0.5rem; /* Space after the label text. */
+     font-weight: 700;
+     color: var(--secondary-text);
+     font-size: 0.9em;
+     margin-right: 0.5rem;
+     flex-shrink: 0; /* Prevent label shrinking */
 }
-
 .controls select {
-     flex-grow: 1; /* Let the dropdown take up available space. */
-     min-width: 180px; /* But don't let it get *too* small. */
-     width: auto; /* Allow it to be wider if needed. */
-     margin-bottom: 0; /* Override the default margin for inputs here. */
+     flex-grow: 1;
+     min-width: 180px;
+     width: auto;
+     margin-bottom: 0; /* Remove margin when inside controls */
 }
 
-/* --- Action Buttons (Main Submit Buttons) --- */
-/* The 'DO IT' button. The 'Make Something Happen' button. The 'Please Work' button. */
+/* --- Buttons --- */
 button.action-button {
-    background-color: var(--primary-accent); /* Gold background */
-    color: var(--dark-text-contrast); /* Dark text for contrast */
-    padding: 0.9rem 1.8rem; /* Nice chunky clickable area. */
-    border: none; /* No border needed. */
-    border-radius: 6px; /* Rounded corners, matching inputs. */
-    cursor: pointer; /* Yes, you can click me! */
-    font-size: 1em; /* Standard text size. */
-    font-weight: 700; /* BOLD BUTTON TEXT! */
-    letter-spacing: 0.5px; /* Slightly spaced out letters. Feels official. */
-    transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.2s ease; /* Smoothness on hover/click. */
-    margin-top: 0.5rem; /* A bit of space above it. */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for a bit of pop. */
+    display: inline-flex; /* Align icon/text */
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem; /* Space between icon/text */
+    background-color: var(--primary-accent);
+    color: var(--dark-text-contrast);
+    padding: 0.8rem 1.6rem; /* Adjusted padding */
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-size: 1em;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    line-height: 1.2; /* Adjust line height for button text */
+    text-align: center;
+    transition: background-color var(--transition-medium), transform var(--transition-fast), box-shadow var(--transition-fast);
+    margin-top: 0.5rem;
+    box-shadow: var(--shadow-sm);
 }
 
-button.action-button:hover {
-    background-color: var(--primary-accent-darker); /* Slightly darker gold on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* More shadow! Look important! */
-    animation: wiggle 0.5s ease-in-out; /* Add wiggle animation */
+button.action-button:hover:not(:disabled) {
+    background-color: var(--primary-accent-darker);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px); /* Subtle lift */
 }
 
-button.action-button:active {
-    transform: scale(0.98); /* Squish effect when clicked. Boop. */
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Less shadow while squished. */
-    animation: none; /* Stop wiggling when clicked */
+button.action-button:active:not(:disabled) {
+    transform: translateY(0) scale(0.98); /* Combine press down */
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Inner shadow on press */
 }
+
 button.action-button:disabled {
-    background-color: var(--medium-neutral); /* Warm grey disabled state */
-    color: var(--container-bg); /* Lighter text on disabled */
-    cursor: not-allowed; /* The 'nope, can't click this' cursor. */
-    opacity: 0.7; /* Slightly faded, indicating its lack of function. Sad button. */
-    animation: none; /* Don't wiggle if disabled */
+    background-color: var(--medium-neutral);
+    color: rgba(255, 255, 255, 0.8); /* White text on grey */
+    cursor: not-allowed;
+    opacity: 0.7;
+    box-shadow: none;
+    transform: none;
 }
 
+button.action-button:focus-visible {
+    outline: 2px solid var(--primary-accent-darker);
+    outline-offset: 2px;
+}
 
 /* --- Output Areas --- */
-/* The reveal! Where the magic (or errors) appear. */
 .output-area, .feedback-area {
-    margin-top: 2rem; /* Plenty of space above these results boxes. */
-    padding: 1.5rem; /* Generous padding inside. */
-    background-color: var(--output-bg); /* Pale yellow/cream background */
-    border: 1px solid #eee5d1; /* Border derived from output-bg */
-    border-radius: 8px; /* Slightly more rounded than inputs. Why not? */
-    min-height: 50px; /* Don't collapse into nothingness if empty. */
+    margin-top: 1.8rem; /* Adjusted margin */
+    padding: 1.2rem 1.5rem;
+    background-color: var(--output-bg);
+    border: 1px solid var(--light-neutral); /* Use light neutral for consistency */
+    border-radius: var(--border-radius-md);
+    min-height: 50px;
 }
 .feedback-area {
-    background-color: var(--container-bg); /* White background for feedback contrast */
-     border: 1px solid var(--light-neutral); /* Standard light warm grey border. */
+    background-color: var(--container-bg); /* Keep white for contrast */
 }
 
 .output-area ul, .output-area ol {
-    padding-left: 25px; /* Indent lists properly. */
+    padding-left: 1.5rem; /* Standard list indent */
+    margin-top: 0.5rem;
+    margin-bottom: 0.8rem;
 }
+.output-area li { margin-bottom: 0.5rem; }
 
-.output-area li {
-    margin-bottom: 0.6rem; /* Space between list items. */
-}
-
-/* Formatted output - used for markdown-like rendering */
-/* Trying to make the AI's output look less like a robot wrote it. Keyword: trying. */
-.formatted-output h3 { margin-top: 0.5em; }
+/* Formatted Output (e.g., markdown rendering) */
+.formatted-output > *:first-child { margin-top: 0; }
+.formatted-output > *:last-child { margin-bottom: 0; }
+.formatted-output h3 { margin: 1em 0 0.5em 0; font-size: 1.2em; }
 .formatted-output p { margin-bottom: 0.8em; }
-.formatted-output ul { margin-top: 0.5em; }
+.formatted-output ul, .formatted-output ol { margin: 0.5em 0 0.8em 1.5rem; }
+.formatted-output code {
+    font-family: var(--font-mono);
+    background-color: var(--main-bg);
+    padding: 0.1em 0.4em;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.9em;
+}
+.formatted-output pre {
+    background-color: var(--main-bg);
+    border: 1px solid var(--light-neutral);
+    border-radius: var(--border-radius-sm);
+    padding: 1em;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    margin-bottom: 1em;
+}
+.formatted-output pre code { background: none; padding: 0; border-radius: 0; font-size: inherit; }
 
 
 #corrected-text-area {
-    margin-bottom: 1.5rem; /* Space below the corrected text. */
-    padding-bottom: 1.5rem; /* Space inside before the border. */
-    border-bottom: 1px solid var(--light-neutral); /* Separator line. */
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--light-neutral);
 }
 #corrected-text {
-    white-space: pre-wrap; /* Respect the spaces and line breaks! Crucial for code/corrections. */
-    background-color: var(--container-bg); /* White background for the text itself. */
-    padding: 0.8em 1em; /* Padding around the text. */
-    border-radius: 6px; /* Rounded corners. */
-    border: 1px solid var(--light-neutral); /* Simple border. */
-    font-family: monospace; /* Monospace: making corrections look official and slightly nerdy. */
-    font-size: 0.95em; /* Slightly smaller text. */
-    line-height: 1.5; /* Readable line spacing. */
-    color: var(--dark-text-contrast); /* Ensure text color is set */
+    white-space: pre-wrap;
+    background-color: var(--container-bg);
+    padding: 0.8em 1em;
+    border-radius: var(--border-radius-sm); /* Smaller radius for code */
+    border: 1px solid var(--light-neutral);
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: var(--dark-text-contrast);
 }
 
 #correction-feedback li {
-    border-bottom: 1px dashed var(--light-neutral); /* Dotted line between feedback items. */
-    padding-bottom: 1em; /* Space below the text, before the line. */
-    margin-bottom: 1em; /* Space below the line, before the next item. */
-    list-style: none; /* Get rid of default bullet points. We have our own style. */
-    padding-left: 0; /* No default padding either. */
+    border-bottom: 1px dashed var(--light-neutral);
+    padding: 0.8em 0; /* Vertical padding */
+    margin-bottom: 0; /* Let padding handle spacing */
+    list-style: none;
+    padding-left: 0;
 }
-#correction-feedback li:last-child {
-    border-bottom: none; /* The last one doesn't need a line below it. Tidy. */
-    margin-bottom: 0; /* No extra space needed after the last one. */
-}
-
+#correction-feedback li:last-child { border-bottom: none; }
 #correction-feedback li strong {
-     color: var(--primary-accent); /* Highlight the labels (like 'Original:') with GOLD */
-     display: inline-block; /* Treat it like a block for width purposes. */
-     min-width: 90px; /* Give labels a minimum width to align things nicely. */
-     margin-right: 10px; /* Space after the label. */
+     color: var(--primary-accent-darker); /* Darker gold label */
+     font-weight: 700;
+     display: inline-block;
+     min-width: 80px; /* Adjusted width */
+     margin-right: 8px; /* Adjusted spacing */
 }
 
 
 /* --- Loading & Error States --- */
-/* Telling the user 'Hold your horses!' or 'Whoops!' */
 .loading, .error {
-    margin-top: 1rem; /* Space above the message. */
-    padding: 0.9rem 1rem; /* Padding inside the message box. */
-    border-radius: 6px; /* Rounded corners. */
-    text-align: center; /* Center the text. Obvs. */
-    font-weight: 700; /* Bold status messages! Pay attention! */
-    display: flex; /* Using flex for easy icon + text alignment. */
-    align-items: center; /* Center items vertically. */
-    justify-content: center; /* Center items horizontally. */
-    gap: 0.7em; /* Space between icon and text. */
+    margin: 1rem 0; /* Use margin for spacing */
+    padding: 0.8rem 1.2rem; /* Adjusted padding */
+    border-radius: var(--border-radius-md);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Keep centered for general messages */
+    gap: 0.7em;
+    font-size: 0.95em;
+    border: 1px solid transparent; /* Base border */
 }
 
 .loading {
-    background-color: var(--success-green-bg); /* Pale green background */
-    color: var(--success-green); /* Standard green text */
-    border: 1px solid #c1e0c2; /* Border derived from success-green-bg */
+    background-color: var(--success-green-bg);
+    color: var(--success-green);
+    border-color: #c8e6c9; /* Softer border */
 }
-
 .error {
-    background-color: var(--error-red-bg); /* Pale red background */
-    color: var(--error-red); /* Standard red text */
-    border: 1px solid #f1bdbd; /* Border derived from error-red-bg */
+    background-color: var(--error-red-bg);
+    color: var(--error-red);
+    border-color: #ffcdd2; /* Softer border */
 }
 
-/* === Funny Icons for Loading & Error States (using ::before) === */
+/* Icons for Loading/Error (Requires Font Awesome in HTML) */
 .loading::before, .error::before {
-    font-family: "Font Awesome 6 Free"; /* Use Font Awesome */
-    font-weight: 900; /* Use the solid style */
-    font-size: 1.2em; /* Make icon slightly bigger than text */
-    display: inline-block;
+    font-family: "Font Awesome 6 Free"; /* Ensure Font Awesome is linked */
+    font-weight: 900; /* Solid style */
+    font-size: 1.1em;
+    line-height: 1; /* Prevent icon affecting line height */
 }
-
 .loading::before {
-    content: '\f5dc'; /* fa-brain */
-    animation: spin 1.5s linear infinite; /* Add a spin animation */
-    color: var(--success-green); /* Match loading text color */
+    content: '\f110'; /* fa-spinner */
+    animation: spin 1.2s linear infinite;
+    color: var(--success-green);
 }
-
 .error::before {
-    content: '\f1e2'; /* fa-bomb */
-    color: var(--error-red); /* Match error text color */
+    content: '\f071'; /* fa-exclamation-triangle */
+    color: var(--error-red);
 }
-
 
 /* --- Chatbot --- */
-/* Here comes the chatty bit! */
 #chat-bubble {
-    position: fixed; /* Stick it to the viewport, don't scroll away! */
-    bottom: 25px; /* Hovering near the bottom. */
-    right: 25px; /* Tucked into the right corner. */
-    background-color: var(--primary-accent); /* Gold bubble */
-    color: var(--dark-text-contrast); /* Dark text on gold */
-    width: 65px; /* Nice and round-ish. */
-    height: 65px; /* Make it a circle! */
-    border-radius: 50%; /* The key to circularity. */
-    display: flex; /* For centering the icon inside. */
-    justify-content: center; /* Center horizontally. */
-    align-items: center; /* Center vertically. */
-    font-size: 28px; /* Big icon! */
-    cursor: pointer; /* Click me to chat! */
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25); /* Make it pop off the page. */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effects. */
-    z-index: 999; /* Keep it above (almost) everything else. Important bubble! */
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background-color: var(--primary-accent);
+    color: var(--dark-text-contrast);
+    width: 60px; /* Standard size */
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px; /* Adjusted icon size */
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: background-color var(--transition-medium), transform var(--transition-fast), box-shadow var(--transition-fast);
+    z-index: 999;
 }
-
 #chat-bubble:hover {
-    background-color: var(--primary-accent-darker); /* Darker gold when hovered. */
-    transform: scale(1.08); /* Get slightly bigger. Don't startle it. */
+    background-color: var(--primary-accent-darker);
+    transform: scale(1.05) translateY(-2px); /* Combined lift/scale */
+    box-shadow: 0 8px 18px rgba(0,0,0,0.2); /* Increase shadow slightly on hover */
 }
 
 #chat-window {
-    position: fixed; /* Stick it to the viewport too. */
-    bottom: 100px; /* Positioned above the bubble. */
-    right: 25px; /* Aligning with the bubble's right edge. */
-    width: 370px; /* A decent width for chatting. */
-    height: 500px; /* Tall enough for a conversation. */
-    background-color: var(--container-bg); /* White window */
-    border-radius: 12px; /* More rounded corners for the window. */
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* A more significant shadow. */
-    /* display: none; /* Controlled by JS */
-    flex-direction: column; /* Stack header, history, input vertically. */
-    overflow: hidden; /* Clip corners nicely with the border-radius. */
-    z-index: 1000; /* KING OF THE LAYERS! Above the bubble. */
-    border: 1px solid var(--light-neutral); /* Subtle warm grey border */
+    position: fixed;
+    bottom: 95px; /* Position above bubble */
+    right: 25px;
+    width: 360px;
+    max-height: calc(100vh - 120px); /* Limit height based on viewport */
+    height: 520px;
+    background-color: var(--container-bg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    display: flex; /* Use flex from the start if controlled by class */
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+    border: 1px solid var(--light-neutral);
+    opacity: 0; /* Start hidden for animation */
+    transform: translateY(15px); /* Start slightly lower */
+    visibility: hidden; /* Hide completely */
+    transition: opacity var(--transition-medium), transform var(--transition-medium), visibility var(--transition-medium);
+}
+body.chat-open #chat-window { /* Use class on body to show/hide */
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
 }
 
 #chat-header {
-    background-color: var(--primary-accent); /* Gold header */
-    color: var(--dark-text-contrast); /* Dark text. */
-    padding: 1rem 1.2rem; /* Comfortable padding. */
-    font-weight: 700; /* Bold header text. */
-    font-size: 1.1em; /* Slightly larger font size. */
-    display: flex; /* For layout of title and close button. */
-    justify-content: space-between; /* Push title left, button right. */
-    align-items: center; /* Align them vertically. */
-    flex-shrink: 0; /* Don't let the header shrink if content overflows somehow. */
+    background-color: var(--primary-accent);
+    color: var(--dark-text-contrast);
+    padding: 0.8rem 1.2rem; /* Adjusted padding */
+    font-weight: 700;
+    font-size: 1.05em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--primary-accent-darker); /* Add subtle divider */
 }
-
 #chat-header #close-chat {
-    background: none; /* No background on the button. */
-    border: none; /* No border either. */
-    color: var(--dark-text-contrast); /* Make the 'X' dark */
-    font-size: 1.3rem; /* A decent size for the close icon. */
-    cursor: pointer; /* Clickable. */
-    opacity: 0.8; /* Slightly transparent. */
-    transition: opacity 0.2s ease; /* Fade smoothly on hover. */
+    background: none; border: none; color: inherit; font-size: 1.4rem; cursor: pointer; opacity: 0.7; transition: opacity var(--transition-fast), transform var(--transition-fast); padding: 0.2rem; line-height: 1;
 }
-#chat-header #close-chat:hover {
-    opacity: 1; /* Fully visible on hover. */
-}
+#chat-header #close-chat:hover { opacity: 1; transform: scale(1.1); }
 
 #chat-history {
-    flex-grow: 1; /* Take up all available vertical space. */
-    padding: 1.2rem; /* Padding around the messages. */
-    overflow-y: auto; /* Allow scrolling if messages overflow. Essential! */
-    background-color: var(--main-bg); /* Warm off-white chat background */
-    display: flex; /* Needed for gap and aligning messages. */
-    flex-direction: column; /* Stack messages vertically. */
-    gap: 0.9rem; /* Space between messages. */
+    flex-grow: 1;
+    padding: 1rem 1.2rem;
+    overflow-y: auto;
+    background-color: var(--main-bg);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem; /* Space between messages */
+    scrollbar-width: thin;
+    scrollbar-color: var(--medium-neutral) transparent;
 }
+#chat-history::-webkit-scrollbar { width: 6px; }
+#chat-history::-webkit-scrollbar-thumb { background-color: var(--medium-neutral); border-radius: 3px; }
+#chat-history::-webkit-scrollbar-track { background: transparent; }
+
 
 .message {
-    padding: 0.7rem 1.1rem; /* Padding inside the message bubble. */
-    border-radius: 18px; /* Very rounded bubbles. Cute. */
-    max-width: 85%; /* Don't let messages stretch *all* the way across. */
-    word-wrap: break-word; /* Break long words if needed. */
-    line-height: 1.5; /* Readable line spacing. */
-    box-shadow: 0 1px 2px rgba(0,0,0,0.08); /* Tiny shadow for definition. */
+    padding: 0.7rem 1.1rem; /* Adjusted padding */
+    border-radius: 18px; /* Rounded bubble */
+    max-width: 85%;
+    word-wrap: break-word;
+    line-height: 1.5;
+    box-shadow: var(--shadow-sm);
+    font-size: 0.95em;
 }
-
 .user-message {
-    background-color: var(--primary-accent); /* Gold for the user */
-    color: var(--dark-text-contrast); /* Dark text for contrast */
-    border-bottom-right-radius: 6px; /* Flatten one corner for that 'speech bubble' look. */
-    align-self: flex-end; /* Push user messages to the right. */
-    margin-left: auto; /* Explicitly push right (often works better with align-self). */
+    background-color: var(--primary-accent);
+    color: var(--dark-text-contrast);
+    border-bottom-right-radius: var(--border-radius-sm); /* Speech bubble corner */
+    align-self: flex-end;
+    margin-left: auto;
 }
-
-/* === Bot Message Icon and Padding === */
 .bot-message {
-    background-color: var(--output-bg); /* Use pale cream/yellow for bot messages */
-    color: var(--dark-text-contrast); /* Standard dark text. */
-    border-bottom-left-radius: 6px; /* Flatten the *other* corner. */
-    align-self: flex-start; /* Push bot messages to the left. */
-    margin-right: auto; /* Explicitly push left. */
-    position: relative; /* Needed for absolute positioning of icon */
-    padding-left: 35px; /* Add space for the icon */
+    background-color: var(--output-bg); /* Use output bg for bot */
+    color: var(--dark-text-contrast);
+    border: 1px solid var(--light-neutral); /* Add subtle border to bot messages */
+    border-bottom-left-radius: var(--border-radius-sm);
+    align-self: flex-start;
+    margin-right: auto;
+    position: relative;
+    padding-left: 38px; /* Space for icon */
 }
-
-.bot-message::before {
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    content: '\f135'; /* fa-robot */
-    position: absolute;
-    left: 12px;
-    top: 10px; /* Adjust vertical position as needed */
-    font-size: 1.1em;
-    color: var(--secondary-text); /* Use secondary text color for bot icon */
-    opacity: 0.8;
+.bot-message::before { /* Bot icon */
+    font-family: "Font Awesome 6 Free"; font-weight: 900; content: '\f135'; /* fa-robot */
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%); /* Center vertically */
+    font-size: 1.2em; color: var(--secondary-text); opacity: 0.8;
 }
-
-
-/* TTS Icon Styling (using the JS-added element) */
-/* Make the robot talk button */
-.bot-message .tts-icon {
-    font-size: 0.9em; /* Slightly smaller than message text. */
-    margin-left: 5px; /* Less margin needed with bot icon */
-    color: var(--primary-accent); /* Gold icon */
-    cursor: pointer; /* Clickable! */
-    opacity: 0.7; /* Slightly transparent. */
-    transition: opacity 0.2s ease, color 0.2s ease; /* Smooth hover effects. */
-    vertical-align: middle; /* Align nicely with the text. */
+.bot-message .tts-icon { /* Text-to-speech icon */
+    font-size: 0.9em; margin-left: 8px; color: var(--primary-accent-darker); cursor: pointer; opacity: 0.7; transition: opacity var(--transition-fast), color var(--transition-fast); vertical-align: middle; display: inline-block; /* Ensure it takes space */
 }
-.bot-message .tts-icon:hover {
-    opacity: 1; /* Fully visible on hover. */
-    color: var(--primary-accent-darker); /* Darker gold on hover. */
-}
+.bot-message .tts-icon:hover { opacity: 1; color: var(--primary-accent); }
 
-/* Status Area inside chat */
-/* For showing loading/error *within* the chat flow */
+/* Chat Status Area (inside chat window) */
 #chat-status-area {
-    padding: 0 0.5rem; /* A bit of horizontal padding. */
-    flex-shrink: 0; /* Don't let it shrink. */
-    background-color: var(--container-bg); /* Match input area bg */
+    padding: 0 0.5rem; flex-shrink: 0; background-color: var(--container-bg); border-top: 1px solid var(--light-neutral);
 }
-/* Apply specific styles for loading/error within chat status area */
-#chat-status-area .loading,
-#chat-status-area .error {
-    font-size: 0.85em; /* Smaller status messages here. */
-    padding: 0.5rem; /* Less padding. */
-    margin: 0.3rem 0.5rem; /* Less margin too. */
-    text-align: left; /* Align text left, not center. */
-    justify-content: flex-start; /* Align content (icon+text) left. */
-    margin-top: 0; /* Override general margin-top */
-    border: none; /* Remove border for inline look */
-    box-shadow: none; /* Remove shadow */
-    /* Icon colors inherited from main ::before rules */
+#chat-status-area .loading, #chat-status-area .error {
+    font-size: 0.8em; padding: 0.4rem 0.6rem; margin: 0.3rem 0; text-align: left; justify-content: flex-start; border: none; box-shadow: none; border-radius: var(--border-radius-sm);
 }
-/* Specific background for chat status */
 #chat-status-area .loading { background-color: var(--success-green-bg); }
 #chat-status-area .error { background-color: var(--error-red-bg); }
 
-
 #chat-input-area {
-    display: flex; /* Line up input and buttons horizontally. */
-    padding: 0.8rem; /* Padding around the input area. */
-    border-top: 1px solid var(--light-neutral); /* Separator line above. */
-    background-color: var(--container-bg); /* White background. */
-    align-items: center; /* Vertically align input and buttons. */
-    flex-shrink: 0; /* Don't let the input area shrink. */
+    display: flex; padding: 0.6rem 0.8rem; border-top: 1px solid var(--light-neutral); background-color: var(--container-bg); align-items: center; flex-shrink: 0; gap: 0.5rem;
 }
-
 #chat-input {
-    flex-grow: 1; /* Let the text input take up most of the space. */
-    border: 1px solid var(--light-neutral); /* Start with light border */
-    padding: 0.6rem 0.8rem; /* Padding inside the input. */
-    margin: 0 0.5rem; /* Space around the input field. */
-    border-radius: 6px; /* Rounded corners. */
-    background-color: var(--container-bg); /* White input bg */
-    transition: background-color 0.2s ease, border-color 0.2s ease; /* Smooth focus transition. */
-    resize: none; /* Just in case it renders as a textarea sometimes */
-    color: var(--dark-text-contrast);
+    flex-grow: 1; border: 1px solid var(--medium-neutral); padding: 0.6rem 0.8rem; margin: 0; border-radius: var(--border-radius-md); background-color: var(--container-bg); transition: border-color var(--transition-fast), box-shadow var(--transition-fast); resize: none; font-size: 0.95em; line-height: 1.4;
 }
 #chat-input:focus {
-    background-color: var(--container-bg); /* White background when focused. */
-    border-color: var(--primary-accent); /* Gold border when focused. */
-    outline: none; /* No default outline. */
-    box-shadow: none; /* No extra glow needed here, the border is enough. */
+    border-color: var(--primary-accent); box-shadow: 0 0 0 2px rgba(228, 192, 106, 0.2); outline: none;
 }
-
 #chat-input-area button {
-    background: none; /* Transparent background. */
-    border: none; /* No border. */
-    padding: 0.5rem; /* Padding around the icon. */
-    font-size: 1.4rem; /* Bigger icons for send/mic. */
-    cursor: pointer; /* Clickable. */
-    color: var(--primary-accent); /* Gold icons */
-    transition: color 0.2s ease, background-color 0.2s ease; /* Smooth hover. */
-    border-radius: 50%; /* Make the button area round. */
-    width: 40px; /* Fixed width. */
-    height: 40px; /* Fixed height. */
-    display: flex; /* To center the icon inside. */
-    justify-content: center; /* Center horizontally. */
-    align-items: center; /* Center vertically. */
+    background: none; border: none; padding: 0; font-size: 1.3rem; /* Slightly smaller icons */ cursor: pointer; color: var(--primary-accent); transition: color var(--transition-fast), background-color var(--transition-fast); border-radius: 50%; width: 38px; height: 38px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;
 }
+#chat-input-area button:hover:not(:disabled) { color: var(--primary-accent-darker); background-color: rgba(228, 192, 106, 0.1); }
+#chat-input-area button:disabled { color: var(--medium-neutral); opacity: 0.6; cursor: not-allowed; background: none; }
+#mic-button.recording { color: var(--error-red); background-color: rgba(211, 47, 47, 0.1); animation: pulse 1.5s infinite ease-in-out; }
 
-#chat-input-area button:hover {
-    color: var(--primary-accent-darker); /* Darker gold icon on hover. */
-    background-color: rgba(212, 175, 55, 0.1); /* Very subtle gold background circle on hover. */
-}
-
-#mic-button.recording {
-    color: var(--error-red); /* RED ALERT! IT'S LISTENING! */
-    background-color: rgba(211, 47, 47, 0.1); /* Subtle red background circle. */
-    animation: pulse 1.5s infinite; /* Make it pulse! Scary! */
-}
-
-/* Interactive Questions Styling */
-/* Time for a pop quiz! Dun dun DUN! */
-.question-item {
-    margin-bottom: 1.5rem; /* Space between questions. */
-    padding-bottom: 1rem; /* Space before the potential divider. */
-}
-hr { /* General HR style update */
-     border: none; /* Get rid of default ugly hr border. */
-     border-top: 1px solid var(--light-neutral); /* Replace with subtle warm grey line. */
-     margin-top: 1.5rem;
-     margin-bottom: 1.5rem;
-}
-/* Specific divider if needed */
-hr.question-divider {
-     border-top-style: dashed; /* Keep dashed style if preferred */
-}
-
+/* --- Interactive Questions --- */
+.question-item { margin-bottom: 1.5rem; padding-bottom: 1rem; }
+hr { border: none; border-top: 1px solid var(--light-neutral); margin: 2rem 0; }
+hr.question-divider { border-top-style: dashed; }
 
 #topic-questions-form label, #level-gen-questions-form label {
-    display: block; /* Make labels take their own line (for radio buttons). */
-    margin-bottom: 0.6rem; /* Space below each label/option. */
-    cursor: pointer; /* Clickable label. Good UX. */
-    padding: 0.5rem 0.8rem; /* Add some padding to make the whole label area hoverable/clickable easily. */
-    border-radius: 4px; /* Slightly rounded background on hover. */
-    transition: background-color 0.2s ease; /* Smooth hover effect. */
-    color: var(--dark-text-contrast); /* Ensure label text color */
+    display: block; margin-bottom: 0.6rem; cursor: pointer; padding: 0.6rem 1rem; border-radius: var(--border-radius-sm); transition: background-color var(--transition-fast); color: var(--dark-text-contrast); border: 1px solid transparent; /* Add base border */
 }
 #topic-questions-form label:hover, #level-gen-questions-form label:hover {
-    background-color: var(--output-bg); /* Pale cream/yellow tint on hover */
+    background-color: var(--output-bg); border-color: var(--light-neutral);
 }
 
-/* Style radio buttons (might be tricky cross-browser, but let's try basic) */
-#topic-questions-form input[type='radio'],
-#level-gen-questions-form input[type='radio'] {
-    margin-right: 0.7em; /* Space between radio button and its text. */
-    vertical-align: middle; /* Align the radio button nicely with the text. */
-    accent-color: var(--primary-accent); /* Style the check color (Gold) */
+#topic-questions-form input[type='radio'], #level-gen-questions-form input[type='radio'] {
+    margin-right: 0.7em; vertical-align: middle; accent-color: var(--primary-accent); transform: scale(1.1); /* Slightly larger radio */ cursor: pointer;
 }
 
-/* Style for fill-in-the-blank */
-/* Make the blanks look like... well, blanks. */
-#topic-questions-form input[type='text'],
-#level-gen-questions-form input[type='text'] {
-    /* Inherit general input styles, but override some */
-    width: auto; /* Don't take full width! Be inline-ish. */
-    display: inline-block; /* Allow it to sit within text. */
-    margin: 0 0.3em; /* Small space around the blank. */
-    padding: 0.3em 0.5em; /* Smaller padding for inline blanks. */
-    margin-bottom: 0; /* Remove default input margin. */
-    box-shadow: none; /* No glow on focus, might be distracting inline. */
-    border: none; /* No default border. */
-    border-bottom: 1px solid var(--medium-neutral); /* Just an underline. Classic blank. */
-    border-radius: 0; /* No rounded corners for the underline look. */
-    background-color: transparent; /* Blend in. */
-    color: var(--dark-text-contrast); /* Ensure text color */
+/* Fill-in-the-blank */
+#topic-questions-form input[type='text'].fill-blank, /* Add a class for targeting */
+#level-gen-questions-form input[type='text'].fill-blank {
+    width: auto; display: inline-block; margin: 0 0.3em; padding: 0.2em 0.4em; margin-bottom: 0; box-shadow: none; border: none; border-bottom: 1px solid var(--medium-neutral); border-radius: 0; background-color: transparent; color: var(--dark-text-contrast); font-size: 1em; line-height: 1.4; vertical-align: baseline;
 }
-#topic-questions-form input[type='text']:focus,
-#level-gen-questions-form input[type='text']:focus {
-     border-bottom-color: var(--primary-accent); /* Highlight the underline on focus (Gold) */
-     box-shadow: none; /* Still no glow. */
-     outline: none; /* Still no outline. */
-     background-color: var(--output-bg); /* Slight bg highlight on focus */
+#topic-questions-form input[type='text'].fill-blank:focus,
+#level-gen-questions-form input[type='text'].fill-blank:focus {
+    border-bottom-color: var(--primary-accent); box-shadow: none; outline: none; background-color: var(--output-bg);
 }
-
 
 .question-feedback {
-    font-weight: bold; /* Make feedback stand out. */
-    margin-left: 15px; /* Indent feedback slightly. */
-    font-size: 0.9em; /* Slightly smaller text. */
-    padding: 0.2em 0.5em; /* Small padding around the feedback text. */
-    border-radius: 4px; /* Rounded corners for the feedback bubble. */
-    display: inline-block; /* Allow background color. */
-    vertical-align: middle; /* Align nicely if next to other elements. */
+    font-weight: bold; margin-left: 10px; font-size: 0.85em; padding: 0.2em 0.6em; border-radius: var(--border-radius-sm); display: inline-block; vertical-align: middle; border: 1px solid transparent;
 }
-.question-feedback.correct {
-    color: var(--success-green); /* Green text for YAY! */
-    background-color: var(--success-green-bg); /* Use standard bg */
-}
-.question-feedback.incorrect {
-    color: var(--error-red); /* Red text for OOPS! */
-    background-color: var(--error-red-bg); /* Use standard bg */
-}
-.question-feedback:not(.correct):not(.incorrect) { /* Style for 'not answered yet' or 'revealed answer' */
-     color: var(--secondary-text); /* Use secondary text color */
-     background-color: #f5f5f5; /* Keep neutral light grey for this state */
-}
+.question-feedback.correct { color: var(--success-green); background-color: var(--success-green-bg); border-color: #c8e6c9; }
+.question-feedback.incorrect { color: var(--error-red); background-color: var(--error-red-bg); border-color: #ffcdd2; }
+.question-feedback:not(.correct):not(.incorrect) { color: var(--secondary-text); background-color: #f0f0f0; border-color: #e0e0e0; }
 
 
-/* === Animation Keyframes === */
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+/* --- Animation Keyframes --- */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(200, 40, 40, 0.4); } 50% { box-shadow: 0 0 0 8px rgba(200, 40, 40, 0); } }
+/* Removed wiggle animation for buttons */
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 992px) { /* Adjusted breakpoint for larger tablets */
+    .tab-container { max-width: 95%; padding: 1.8rem 2rem; }
 }
 
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.4); } /* Start pulse */
-    70% { box-shadow: 0 0 0 10px rgba(211, 47, 47, 0); } /* Expand pulse */
-    100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); } /* End pulse */
-}
-
-@keyframes wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-2deg) scale(1.02); }
-  75% { transform: rotate(2deg) scale(1.02); }
-}
-
-
-/* Responsive Adjustments */
-/* Okay, time to squish everything for tiny screens. Good luck, elements! */
 @media (max-width: 768px) {
-    body { font-size: 15px; } /* Slightly smaller text overall on tablets maybe? */
-    h1 { font-size: 2em; } /* Shrink the main title a bit. */
-    h2 { font-size: 1.6em; } /* Shrink H2 too. */
-    h3 { font-size: 1.3em; } /* And H3. Everyone shrinks! */
+    body { font-size: 15px; }
+    h1 { font-size: 1.9em; }
+    h2 { font-size: 1.5em; }
+    h3 { font-size: 1.2em; }
 
-    .tab-container {
-        margin: 1.5rem 1rem; /* Less margin side-to-side, less top/bottom. */
-        padding: 1.5rem; /* Less padding inside. */
+    .tab-container { margin: 1.5rem 1rem; padding: 1.5rem; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .controls select, .controls input[type="text"], .controls label { width: 100%; margin-bottom: 0.8rem; margin-right: 0; flex-grow: unset; }
+    .controls button.action-button { width: 100%; margin-top: 0.5rem; }
+    /* Ensure specific inputs also stack */
+    #vocab-helper .controls input[type="text"],
+    #topic-questions-form input[type='text'].fill-blank,
+    #level-gen-questions-form input[type='text'].fill-blank {
+         margin-bottom: 0.8rem; /* Add margin when stacked */
+         display: block; /* Ensure they take full width when stacked */
+         width: 100%;
     }
-    .tab-buttons {
-       /* Horizontal scroll already handled. Phew. */
-    }
-    .controls {
-        flex-direction: column; /* Stack controls vertically. */
-        align-items: stretch; /* Make items full width. */
-    }
-    .controls select, .controls input[type="text"], .controls label /* Adjust controls for vertical stacking */ {
-         width: 100%; /* Full width now. */
-         margin-bottom: 1rem; /* Add margin back below stacked items. */
-         margin-right: 0; /* Remove right margin for labels */
-         flex-grow: unset; /* Prevent select/input growing weirdly */
-    }
-     /* Ensure buttons in controls stack okay */
-    .controls button.action-button {
-        width: 100%;
-        margin-top: 0.5rem;
-    }
-     /* Specific fix for vocab helper input */
-    #vocab-helper .controls input[type="text"] {
-        margin-bottom: 1rem;
-    }
-
 
     #chat-window {
-        width: 95%; /* Take up most of the screen width. */
-        max-width: 400px; /* But don't get TOO wide on slightly larger 'mobile' screens. */
-        height: 70vh; /* Take up a good chunk of the vertical height. */
-        bottom: 10px; /* Closer to the bottom edge. */
-        right: 2.5%; /* Center it horizontally using fixed positioning. */
-        left: 2.5%; /* Center it horizontally. */
+        width: calc(100% - 30px); /* Slightly less than full width */
+        max-width: 380px; /* Max width on mobile */
+        height: clamp(400px, 70vh, 550px); /* Responsive height */
+        bottom: 15px; right: 15px; left: auto; /* Keep right aligned */
+        transform-origin: bottom right; /* Animate from corner */
     }
-    #chat-bubble {
-        bottom: 15px; /* Adjust bubble position slightly. */
-        right: 15px;
-        width: 60px; /* Slightly smaller bubble. */
-        height: 60px;
-        font-size: 24px; /* Slightly smaller icon. */
-    }
+    #chat-bubble { bottom: 15px; right: 15px; width: 55px; height: 55px; font-size: 22px; }
 }
 
 @media (max-width: 480px) {
-    /* Even TINIER screens? Are you reading this on a watch?! Fine, more squishing. */
-     h1 { font-size: 1.8em; } /* Smaller title again. */
-     h2 { font-size: 1.4em; } /* And H2. */
-     .tab-container { padding: 1rem; } /* Even less padding. */
-     .tab-button { padding: 0.6rem 1rem; font-size: 0.95em; } /* Smaller tabs. */
-     button.action-button { padding: 0.8rem 1.5rem; font-size: 0.95em;} /* Smaller action buttons. */
-     #chat-window { height: 75vh; } /* Even taller chat window on small phones. */
-     .message { max-width: 90%; } /* Allow messages to be slightly wider on narrow screens. */
+     h1 { font-size: 1.7em; }
+     h2 { font-size: 1.4em; }
+     h3 { font-size: 1.15em; }
+     .tab-container { padding: 1.2rem 1rem; margin: 1rem 0.5rem; }
+     .tab-button { padding: 0.7rem 1rem; font-size: 0.95em; }
+     button.action-button { padding: 0.8rem 1.4rem; font-size: 0.95em;}
+     textarea, input[type="text"], input[type="email"], input[type="password"], select { padding: 0.7rem 0.9rem; }
+     #chat-window {
+         height: calc(100% - 80px); /* Almost full height */
+         bottom: 10px; right: 10px; left: 10px; width: auto; /* Full width minus padding */
+         border-radius: var(--border-radius-md); /* Less radius on small screens */
+     }
+     #chat-header { padding: 0.7rem 1rem; font-size: 1em; }
+     #chat-history { padding: 0.8rem 1rem; }
+     .message { padding: 0.6rem 1rem; font-size: 0.9em; max-width: 90%; }
+     #chat-input-area { padding: 0.5rem 0.6rem; gap: 0.3rem; }
+     #chat-input { font-size: 0.9em; padding: 0.5rem 0.7rem; }
+     #chat-input-area button { width: 34px; height: 34px; font-size: 1.2rem; }
 
-     /* Ensure controls stack cleanly on very small screens */
-     .controls {
-         gap: 0.5rem; /* Reduce gap */
-         margin-bottom: 1rem;
-     }
-     .controls label {
-         margin-bottom: 0.3rem;
-         font-size: 0.9em;
-     }
-     .controls select, .controls input[type="text"] {
-        padding: 0.8rem; /* Slightly less padding */
-        margin-bottom: 0.8rem;
-     }
-     .controls button.action-button {
-        margin-top: 0.3rem;
-     }
+     .controls { gap: 0.5rem; margin-bottom: 1rem; }
+     .controls label { margin-bottom: 0.3rem; font-size: 0.9em; }
+     .controls select, .controls input[type="text"] { padding: 0.7rem; margin-bottom: 0.6rem; }
+     .controls button.action-button { margin-top: 0.3rem; }
 }
-
-/* Phew! That was a lot of styling. Hopefully this yellow/gold focus is more like it! */
