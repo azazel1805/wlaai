@@ -1,196 +1,700 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADAI</title> <!-- Added flair -->
+    <title>ADAI Portal</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👑</text></svg>">
 
-    <!-- Favicon Link (Ensure 'favicon.png' is in your static folder) -->
-    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* --- CSS Variables --- */
+        :root {
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            --primary-color: #007aff; /* Apple Blue */
+            --primary-color-hover: #005ecb;
+            --secondary-color: #6c757d;
+            --text-color: #1d1d1f; /* Near Black */
+            --text-color-light: #555;
+            --text-color-subtle: #86868b;
+            --bg-color: #f5f5f7; /* Light Gray */
+            --card-bg-color: #ffffff;
+            --border-color: #d2d2d7;
+            --error-color: #d93025; /* Google Red */
+            --success-color: #34c759; /* Apple Green */
+            --focus-ring-color: rgba(0, 122, 255, 0.25);
+            --google-btn-bg: #ffffff;
+            --google-btn-border: #dadce0;
+            --google-btn-text: #3c4043;
+            --google-btn-bg-hover: #f8f9fa;
 
-    <!-- Your Stylesheet -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👑</text></svg>">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+            --border-radius: 8px; /* Slightly more rounded */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px; /* Increased base spacing */
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-xxl: 48px;
+
+            --transition-speed: 0.2s ease-in-out;
+            --login-box-width: 380px; /* Slightly wider */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Base & Reset --- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            height: 100%;
+            font-size: 16px; /* Base font size */
+        }
+        body {
+            height: 100%;
+            font-family: var(--font-family);
+            background-image: linear-gradient(135deg, #f5f5f7 0%, #e9e9ed 100%); /* Subtle gradient */
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow: hidden; /* Prevent scrollbars caused by fixed elements/iframe */
+        }
+
+        /* --- Logged-Out Layout Wrapper --- */
+        .login-page-wrapper {
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: row;
+        }
+        body.auth-state--logged-in .login-page-wrapper { display: none; }
+        body.auth-state--logged-out .login-page-wrapper { display: flex; }
+
+
+        /* Left Side Login Box (Logged Out View) */
+        .login-box {
+            width: var(--login-box-width);
+            max-width: 100%;
+            flex-shrink: 0;
+            background-color: var(--card-bg-color);
+            padding: var(--spacing-xl) var(--spacing-lg); /* Adjusted padding */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.07); /* Softer shadow */
+            position: relative;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .login-box-title {
+            font-size: 1.75em; /* Slightly larger */
+            font-weight: 700; /* Bolder */
+            color: var(--text-color);
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+        }
+
+        /* Right Side Prompt Area (Logged Out View) */
+        .login-prompt-area {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--spacing-xl);
+            /* background-color: var(--bg-color); No need if body has gradient */
+        }
+        #login-prompt {
+            padding: 0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            max-width: 480px; /* Wider */
+        }
+        #login-prompt svg {
+            width: 60px; /* Larger icon */
+            height: 60px;
+            margin-bottom: var(--spacing-lg);
+            fill: var(--primary-color);
+            opacity: 0.9;
+        }
+        #login-prompt h2 {
+            color: var(--text-color-subtle); /* More subtle text */
+            font-weight: 400; /* Lighter */
+            font-size: 1.8em; /* Larger */
+            line-height: 1.4;
+        }
+
+        /* --- Auth Forms (Inside Login Box) --- */
+        .auth-form {
+            display: none;
+            flex-direction: column;
+            gap: var(--spacing-md); /* Consistent gap */
+            width: 100%;
+        }
+        body.auth-state--logged-out.form-view--signin .login-box #signin-form { display: flex; }
+        body.auth-state--logged-out.form-view--signup .login-box #signup-form { display: flex; }
+
+        /* Form Inputs/Buttons */
+        .auth-form input[type="email"],
+        .auth-form input[type="password"] {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 1em; /* Standardize font size */
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+            width: 100%;
+            height: 44px; /* Taller inputs */
+            background-color: #fff;
+            appearance: none; /* Remove default browser styles */
+        }
+        .auth-form input[type="email"]:focus,
+        .auth-form input[type="password"]:focus {
+            border-color: var(--primary-color);
+            outline: 0;
+            box-shadow: 0 0 0 4px var(--focus-ring-color); /* Larger focus ring */
+        }
+        .auth-form input::placeholder {
+            color: var(--text-color-subtle);
+            opacity: 1; /* Make sure it's visible */
+        }
+
+        .auth-form button {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            cursor: pointer;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1em;
+            font-weight: 600; /* Slightly bolder text */
+            transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+            width: 100%;
+            height: 44px; /* Match input height */
+            line-height: 1; /* Align text vertically */
+            margin-top: var(--spacing-sm); /* Add space above button */
+            display: inline-flex; /* For icon alignment if needed */
+            justify-content: center;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        .auth-form button[type="submit"] {
+             background-color: var(--primary-color);
+             color: white;
+             box-shadow: var(--shadow-sm);
+        }
+        .auth-form button[type="submit"]:hover:not(:disabled) {
+             background-color: var(--primary-color-hover);
+             box-shadow: var(--shadow-md);
+        }
+        .auth-form button:active:not(:disabled) {
+             transform: scale(0.98);
+             box-shadow: none;
+        }
+        .auth-form button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .auth-form button .spinner {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: -1.5em; /* Position correctly next to text */
+            margin-right: 0.5em;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Google Sign-In Button */
+        #google-signin-button {
+            background-color: var(--google-btn-bg);
+            color: var(--google-btn-text);
+            border: 1px solid var(--google-btn-border);
+            font-weight: 500; /* Standard weight */
+            box-shadow: none;
+            margin-top: 0; /* No extra top margin needed */
+        }
+        #google-signin-button:hover:not(:disabled) {
+            background-color: var(--google-btn-bg-hover);
+            box-shadow: var(--shadow-sm);
+        }
+        #google-signin-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Separator */
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--text-color-subtle);
+            font-size: 0.85em;
+            margin: var(--spacing-md) 0; /* Spacing around separator */
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        .separator::before,
+        .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .separator::before { margin-right: .5em; }
+        .separator::after { margin-left: .5em; }
+
+        /* Links and Errors */
+        .toggle-link {
+            font-size: 0.9em;
+            color: var(--primary-color);
+            cursor: pointer;
+            text-decoration: none;
+            white-space: nowrap;
+            margin-left: 0;
+            text-align: center;
+            margin-top: var(--spacing-md);
+            display: block;
+            transition: color var(--transition-speed);
+        }
+        .toggle-link:hover {
+            color: var(--primary-color-hover);
+            text-decoration: underline;
+        }
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85em;
+            font-weight: 500;
+            white-space: normal;
+            margin-left: 0;
+            text-align: center;
+            display: none;
+            line-height: 1.4;
+            margin-top: var(--spacing-xs); /* Reduced space above errors */
+            min-height: 1.4em;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background-color: rgba(217, 48, 37, 0.05); /* Light error bg */
+            border-radius: var(--border-radius);
+        }
+        .error-message:not(:empty) {
+            display: block;
+        }
+
+        /* --- Logged-In View Elements --- */
+        body > iframe {
+            width: 100%;
+            height: 100vh; /* Full viewport height */
+            border: none;
+            display: none; /* Hide by default */
+            background-color: transparent; /* Allow body gradient to show if iframe bg is transparent */
+        }
+        body.auth-state--logged-in > iframe { display: block; }
+
+        /* Standalone Signout Button Styling */
+        #signout-button {
+            position: fixed;
+            top: var(--spacing-md);
+            right: var(--spacing-md); /* Moved to top-right */
+            left: auto; /* Reset left positioning */
+            z-index: 1000;
+            display: none; /* Hidden by default */
+
+            padding: var(--spacing-sm) var(--spacing-lg);
+            cursor: pointer;
+            border: none;
+            border-radius: var(--border-radius);
+            background-color: rgba(0, 0, 0, 0.65); /* Slightly darker */
+            color: white;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        #signout-button:hover {
+             background-color: rgba(0, 0, 0, 0.8);
+             box-shadow: var(--shadow-md);
+        }
+         #signout-button:active {
+            transform: scale(0.98);
+            box-shadow: none;
+        }
+        body.auth-state--logged-in #signout-button { display: block; }
+
+        /* --- Responsiveness --- */
+        @media (max-width: 768px) {
+             .login-page-wrapper {
+                 flex-direction: column;
+                 height: auto;
+                 min-height: 100vh;
+             }
+             .login-box {
+                 width: 100%;
+                 height: auto;
+                 min-height: 0; /* Remove fixed min-height */
+                 box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+                 border-right: none;
+                 padding: var(--spacing-lg) var(--spacing-md);
+                 order: 1; /* Show login box first on mobile */
+             }
+            .login-prompt-area {
+                 min-height: 25vh; /* Shorter prompt area */
+                 padding: var(--spacing-lg) var(--spacing-md);
+                 order: 2; /* Show prompt after login box */
+            }
+            #login-prompt h2 {
+                 font-size: 1.5em;
+             }
+            #login-prompt svg {
+                 width: 50px;
+                 height: 50px;
+            }
+            .login-box-title {
+                 margin-bottom: var(--spacing-md);
+             }
+        }
+         @media (max-width: 480px) {
+             :root { font-size: 15px; } /* Slightly smaller base */
+             .login-box { padding: var(--spacing-md); }
+             #login-prompt h2 { font-size: 1.3em; }
+             .auth-form input[type="email"],
+             .auth-form input[type="password"],
+             .auth-form button { height: 42px; font-size: 0.95em; }
+             #signout-button {
+                  padding: var(--spacing-sm) var(--spacing-md);
+                  font-size: 0.85em;
+             }
+         }
+
+    </style>
 
 </head>
-<body>
-    <header>
-        <h1>ADA<span style="color:white; text-shadow: 0 0 10px cyan;">I</span></h1>
-    </header>
+<!-- Default state classes -->
+<body class="auth-state--logged-out form-view--signin">
 
-    <div class="tab-container">
-        <div class="tab-buttons">
-            <button class="tab-button active" data-tab="corrector">Text Corrector</button>
-            <button class="tab-button" data-tab="topic-generator">Grammar Aid</button>
-            <button class="tab-button" data-tab="vocab-helper">Vocabulary Aid</button>
-            <button class="tab-button" data-tab="paraphraser">Paraphraser</button>
-            <button class="tab-button" data-tab="level-generator">Text Generator</button>
-        </div>
+<!-- Logged Out View Container -->
+<div class="login-page-wrapper">
+    <div class="login-box">
+        <h1 class="login-box-title">ADAI Portal</h1>
 
-        <!-- Corrector Tab -->
-        <div class="tab-content active" id="corrector">
-            <h2>Text Corrector</h2>
-            <p>Enter text below to find mistakes and get detailed feedback.</p>
-            <textarea id="text-to-correct" rows="8" placeholder="Enter your text here..."></textarea>
-            <button id="corrector-button" class="action-button">Do the magic!</button>
-             <!-- MODIFIED: Removed inner spinner icon -->
-            <div id="corrector-loading" class="loading" style="display: none;">Wait for it... </div>
-            <div id="corrector-error" class="error" style="display: none;"></div> <!-- Error icon added by CSS -->
-            <div id="corrector-output" class="output-area" style="display: none;">
-                 <div id="corrected-text-area">
-                     <h3>Corrected Text:</h3>
-                     <p id="corrected-text" class="formatted-output"></p>
-                 </div>
-                 <hr>
-                 <div id="correction-feedback-area">
-                      <h3>Feedback:</h3>
-                      <ul id="correction-feedback"></ul>
-                 </div>
-            </div>
-        </div>
+        <!-- Sign In Form -->
+        <form id="signin-form" class="auth-form" action="javascript:void(0);" novalidate>
+            <input type="email" id="signin-email" placeholder="Email" required aria-label="Email for Sign In" autocomplete="email">
+            <input type="password" id="signin-password" placeholder="Password" required aria-label="Password for Sign In" autocomplete="current-password">
+            <span id="signin-error" class="error-message" aria-live="polite"></span>
+            <button type="submit" id="signin-button">Sign In</button>
+            <div class="separator">OR</div>
+            <button type="button" id="google-signin-button">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" xmlns:xlink="http://www.w3.org/1999/xlink" style="display: block;">
+                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                    <path fill="none" d="M0 0h48v48H0z"></path>
+                </svg>
+                Sign In with Google
+            </button>
+            <a class="toggle-link" id="show-signup-link">Don't have an account? Create one</a>
+        </form>
 
-        <!-- Topic Generator Tab -->
-        <div class="tab-content" id="topic-generator">
-            <h2>Grammar Aid</h2>
-            <p>Select a level and topic to get an explanation and practice questions.</p>
-            <div class="controls">
-                 <label for="topic-level">Level:</label>
-                 <select id="topic-level">
-                     {% for level in levels %}
-                         <option value="{{ level }}">{{ level }}</option>
-                     {% endfor %}
-                 </select>
-                 <label for="topic-select">Topic:</label>
-                 <select id="topic-select">
-                     <!-- Options will be populated by JS -->
-                 </select>
-                 <button id="topic-generator-button" class="action-button">Help Me!</button>
-            </div>
-            <!-- MODIFIED: Removed inner spinner icon -->
-            <div id="topic-generator-loading" class="loading" style="display: none;">Wait for it... </div>
-            <div id="topic-generator-error" class="error" style="display: none;"></div> <!-- Error icon added by CSS -->
-            <div id="topic-generator-output" class="output-area" style="display: none;">
-                 <h3>Explanation:</h3>
-                 <div id="topic-explanation" class="formatted-output"></div>
-                 <h3>Questions:</h3>
-                 <form id="topic-questions-form"></form>
-                 <button id="check-topic-answers-button" class="action-button" style="display: none;">Check Answers</button>
-                 <div id="topic-feedback" class="feedback-area"></div>
-            </div>
-        </div>
-
-        <!-- Vocabulary Helper Tab -->
-        <div class="tab-content" id="vocab-helper">
-            <h2>Vocabulary Helper</h2>
-            <p>Enter a word to get detailed information.</p>
-            <div class="controls">
-                <input type="text" id="word-input" placeholder="Enter a word..." style="flex-grow: 1;">
-                <button id="vocab-helper-button" class="action-button">Impress me!</button>
-            </div>
-            <!-- MODIFIED: Removed inner spinner icon -->
-            <div id="vocab-helper-loading" class="loading" style="display: none;">Wait for it... </div>
-            <div id="vocab-helper-error" class="error" style="display: none;"></div> <!-- Error icon added by CSS -->
-            <div id="vocab-helper-output" class="output-area formatted-output" style="display: none;">
-                <!-- Info will be displayed here -->
-            </div>
-        </div>
-
-        <!-- Paraphraser Tab -->
-        <div class="tab-content" id="paraphraser">
-            <h2>Paraphraser</h2>
-            <p>Enter text and choose a style to get paraphrased versions.</p>
-            <textarea id="text-to-paraphrase" rows="5" placeholder="Enter text to rephrase..."></textarea>
-            <div class="controls">
-                <label for="paraphrase-style">Style:</label>
-                <select id="paraphrase-style">
-                     {% for style in paraphrase_styles %}
-                         <option value="{{ style }}">{{ style }}</option>
-                     {% endfor %}
-                </select>
-                <button id="paraphraser-button" class="action-button">Paraphrase</button>
-            </div>
-             <!-- MODIFIED: Removed inner spinner icon -->
-            <div id="paraphraser-loading" class="loading" style="display: none;">Rephrasing... </div>
-            <div id="paraphraser-error" class="error" style="display: none;"></div> <!-- Error icon added by CSS -->
-            <div id="paraphraser-output" class="output-area" style="display: none;">
-                <h3>Paraphrased Versions:</h3>
-                <ul id="paraphrase-list"></ul>
-            </div>
-        </div>
-
-         <!-- Level Generator Tab -->
-         <div class="tab-content" id="level-generator">
-            <h2>Level-Based Text Generator</h2>
-            <p>Select a level to generate a text with comprehension questions.</p>
-            <div class="controls">
-                 <label for="level-gen-level">Level:</label>
-                 <select id="level-gen-level">
-                     {% for level in levels %}
-                         <option value="{{ level }}">{{ level }}</option>
-                     {% endfor %}
-                 </select>
-                 <button id="level-generator-button" class="action-button">Generate Text</button>
-            </div>
-            <!-- MODIFIED: Removed inner spinner icon -->
-            <div id="level-generator-loading" class="loading" style="display: none;">Generating... </div>
-            <div id="level-generator-error" class="error" style="display: none;"></div> <!-- Error icon added by CSS -->
-            <div id="level-generator-output" class="output-area" style="display: none;">
-                 <h3>Generated Text:</h3>
-                 <div id="level-gen-text" class="formatted-output"></div>
-                 <hr>
-                 <h3>Questions:</h3>
-                 <form id="level-gen-questions-form"></form>
-                 <button id="check-level-gen-answers-button" class="action-button" style="display: none;">Check Answers</button>
-                 <div id="level-gen-feedback" class="feedback-area"></div>
-            </div>
-        </div>
-
-    </div> <!-- End Tab Container -->
-
-    <!-- Chatbot Bubble -->
-    <!-- OPTIONAL MODIFICATION: Change fa-comment-dots to fa-crown if desired -->
-    <div id="chat-bubble">
-        <i class="fas fa-comment-dots"></i> <!-- Or <i class="fas fa-crown"></i> -->
+        <!-- Sign Up Form -->
+        <form id="signup-form" class="auth-form" action="javascript:void(0);" novalidate>
+             <input type="email" id="signup-email" placeholder="Email" required aria-label="Email for Sign Up" autocomplete="email">
+             <input type="password" id="signup-password" placeholder="Password (min 6 characters)" required minlength="6" aria-label="Password for Sign Up" autocomplete="new-password">
+             <span id="signup-error" class="error-message" aria-live="polite"></span>
+             <button type="submit" id="signup-button">Create Account</button>
+             <div class="separator">OR</div>
+             <button type="button" id="google-signup-button"> <!-- Also add Google button here -->
+                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" xmlns:xlink="http://www.w3.org/1999/xlink" style="display: block;"> <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path> <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path> <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path> <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path> <path fill="none" d="M0 0h48v48H0z"></path> </svg>
+                 Sign Up with Google
+             </button>
+             <a class="toggle-link" id="show-signin-link">Already have an account? Sign In</a>
+        </form>
     </div>
-
-    <!-- Chatbot Window (Initially Hidden) -->
-    <div id="chat-window" style="display: none;">
-        <div id="chat-header">
-            Ada
-            <button id="close-chat" title="Close Chat"><i class="fas fa-times"></i></button>
-        </div>
-        <div id="chat-history">
-            <!-- Chat messages appear here -->
-            <!-- Bot messages will get icon via CSS -->
-            <div class="message bot-message">Hello! How can I help you today?</div>
-        </div>
-        <div id="chat-status-area">
-             <!-- MODIFIED: Removed inner spinner icon -->
-             <div id="chat-loading" class="loading" style="display: none; margin: 5px; padding: 5px; font-size: 0.9em;">Thinking... </div>
-             <div id="chat-error" class="error" style="display: none; margin: 5px; padding: 5px; font-size: 0.9em;"></div> <!-- Error icon added by CSS -->
-        </div>
-        <div id="chat-input-area">
-            <button id="mic-button" title="Use Microphone"><i class="fas fa-microphone"></i></button>
-            <input type="text" id="chat-input" placeholder="Type your message or use mic...">
-            <button id="send-chat-button" title="Send Message"><i class="fas fa-paper-plane"></i></button>
+    <div class="login-prompt-area">
+        <div id="login-prompt">
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3A5.25 5.25 0 0012 1.5zm-3.75 8.25v-3a3.75 3.75 0 117.5 0v3h-7.5z" clip-rule="evenodd" /></svg>
+             <h2>Unlock Insights. Access the WLA AI Suite Portal.</h2>
         </div>
     </div>
+</div>
 
-    <!-- Hidden Audio Player for TTS -->
-    <audio id="tts-audio" style="display: none;"></audio>
+<!-- Logged In View Elements -->
+<iframe
+    src="https://wlaai.onrender.com/"
+    title="Wimbledon AI Suite Application"
+    allowfullscreen
+    allow="microphone">
+</iframe>
 
-    <!-- Define JS variables passed from Flask *before* loading script.js -->
-    <script>
-        const grammarTopicsData = {{ grammar_topics | tojson }};
-        const levels = {{ levels | tojson }};
-        const elevenlabsClientAvailable = {{ elevenlabs_ready | tojson }};
-        console.log("ElevenLabs Available (from HTML):", elevenlabsClientAvailable); // Debugging
-    </script>
-    <!-- Load the main script file -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<button id="signout-button">Sign Out</button>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+
+<script>
+    // --- Firebase Configuration ---
+    // !! IMPORTANT: Replace with your actual Firebase config !!
+    // It's best practice to load this from a server or environment variables,
+    // but for simplicity, it's included here. Keep your API keys secure!
+    const firebaseConfig = {
+        apiKey: "AIzaSyCYqxkVnMExX5AnEegzCUR0I5zj4vpOqMY",
+            authDomain: "wlaaisuite.firebaseapp.com",
+            projectId: "wlaaisuite",
+            storageBucket: "wlaaisuite.firebasestorage.app",
+            messagingSenderId: "1085617786493",
+            appId: "1:1085617786493:web:5292d10c43f06e240cab14",
+            measurementId: "G-D594FJ9DP1"
+    };
+    // --- End Firebase Configuration ---
+
+    // --- Initialize Firebase ---
+    let app, auth;
+    try {
+        // Basic check if config seems placeholder-like
+        if (!firebaseConfig.apiKey || firebaseConfig.apiKey.startsWith("YOUR_")) {
+            throw new Error("Firebase configuration is missing or incomplete. Please update firebaseConfig in the script.");
+        }
+        app = firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+    } catch (error) {
+        console.error("Firebase initialization error:", error);
+        document.body.innerHTML = `<div style="padding: 20px; text-align: center; color: red; background-color: #fff; border: 1px solid red; margin: 20px; font-family: sans-serif;"><strong>Configuration Error:</strong> Could not initialize authentication. ${error.message} Please check your Firebase config and ensure Firebase SDKs are loaded correctly.</div>`;
+        auth = null; // Prevent further JS errors
+    }
+
+    // --- DOM Element References ---
+    const body = document.body;
+    // Logged out elements
+    const loginPageWrapper = document.querySelector('.login-page-wrapper');
+    const signinForm = document.getElementById('signin-form');
+    const signupForm = document.getElementById('signup-form');
+    const signinEmailInput = document.getElementById('signin-email');
+    const signinPasswordInput = document.getElementById('signin-password');
+    const signinButton = document.getElementById('signin-button');
+    const signinErrorElement = document.getElementById('signin-error');
+    const signupEmailInput = document.getElementById('signup-email');
+    const signupPasswordInput = document.getElementById('signup-password');
+    const signupButton = document.getElementById('signup-button');
+    const signupErrorElement = document.getElementById('signup-error');
+    const showSignupLink = document.getElementById('show-signup-link');
+    const showSigninLink = document.getElementById('show-signin-link');
+    const googleSigninButton = document.getElementById('google-signin-button');
+    const googleSignupButton = document.getElementById('google-signup-button'); // Added
+    // Logged in elements
+    const mainIframe = document.querySelector('body > iframe');
+    const signoutButton = document.getElementById('signout-button');
+
+    // --- Helper Functions ---
+    function clearErrors() {
+        if (signinErrorElement) signinErrorElement.textContent = '';
+        if (signupErrorElement) signupErrorElement.textContent = '';
+    }
+
+    function clearForms() {
+        if (signinForm) {
+            signinForm.reset();
+            setFormLoading(false, 'signin'); // Use identifier
+        }
+        if (signupForm) {
+            signupForm.reset();
+            setFormLoading(false, 'signup'); // Use identifier
+        }
+        clearErrors();
+    }
+
+    function displayAuthError(error, formType) { // formType can be 'signin', 'signup', or 'google'
+         console.error('Authentication Error:', error.code, error.message);
+         let friendlyMessage = "An unexpected error occurred. Please try again.";
+         let errorElement = null;
+
+         if (formType === 'signin' && signinErrorElement) errorElement = signinErrorElement;
+         else if (formType === 'signup' && signupErrorElement) errorElement = signupErrorElement;
+         else if (formType === 'google') { // Show Google errors on currently visible form
+            if (body.classList.contains('form-view--signin')) errorElement = signinErrorElement;
+            else if (body.classList.contains('form-view--signup')) errorElement = signupErrorElement;
+         }
+
+         if (error && error.code) {
+             switch (error.code) {
+                case 'auth/invalid-email': friendlyMessage = 'Please enter a valid email address.'; break;
+                case 'auth/user-not-found': friendlyMessage = 'No account found with this email.'; break;
+                case 'auth/wrong-password': friendlyMessage = 'Incorrect password. Please try again.'; break;
+                case 'auth/email-already-in-use': friendlyMessage = 'An account already exists with this email.'; break;
+                case 'auth/weak-password': friendlyMessage = 'Password should be at least 6 characters.'; break;
+                case 'auth/too-many-requests': friendlyMessage = 'Access temporarily disabled due to many attempts. Try again later.'; break;
+                case 'auth/network-request-failed': friendlyMessage = 'Network error. Please check your internet connection.'; break;
+                case 'auth/popup-closed-by-user': friendlyMessage = 'Sign-in cancelled.'; break; // Google specific
+                case 'auth/account-exists-with-different-credential': friendlyMessage = 'An account already exists with this email using a different sign-in method.'; break; // Google specific
+                case 'auth/operation-not-allowed': friendlyMessage = 'Sign-in method is not enabled in Firebase console.'; break;
+                default: friendlyMessage = `Error: ${error.message} (Code: ${error.code})`; // Show code for unhandled errors
+             }
+         } else if (error && error.message) {
+             friendlyMessage = error.message; // Fallback to raw message
+         }
+
+         if (errorElement) errorElement.textContent = friendlyMessage;
+    }
+
+    // formType: 'signin', 'signup' (Google buttons aren't disabled during loading)
+    function setFormLoading(isLoading, formType) {
+        const button = (formType === 'signup') ? signupButton : signinButton;
+        const inputs = (formType === 'signup')
+            ? [signupEmailInput, signupPasswordInput]
+            : [signinEmailInput, signinPasswordInput];
+        const buttonText = (formType === 'signup') ? 'Create Account' : 'Sign In';
+        const loadingText = (formType === 'signup') ? 'Creating...' : 'Signing In...';
+
+        if (button) {
+            button.disabled = isLoading;
+            // Add/remove spinner dynamically
+            const existingSpinner = button.querySelector('.spinner');
+            if (isLoading && !existingSpinner) {
+                const spinner = document.createElement('span');
+                spinner.className = 'spinner';
+                button.insertBefore(spinner, button.firstChild); // Add spinner before text
+                button.childNodes[1].nodeValue = ` ${loadingText}`; // Add space before text
+            } else if (!isLoading && existingSpinner) {
+                existingSpinner.remove();
+                button.textContent = buttonText;
+            } else if (isLoading && existingSpinner) {
+                 button.childNodes[1].nodeValue = ` ${loadingText}`; // Update text if spinner exists
+            } else {
+                button.textContent = buttonText; // Set initial/final text
+            }
+        }
+        if (inputs?.length > 0) {
+            inputs.forEach(input => { if (input) input.disabled = isLoading; });
+        }
+        if (isLoading) clearErrors(); // Clear errors when starting loading
+    }
+
+    // --- Google Sign-In Handler ---
+    function handleGoogleSignIn() {
+        if (!auth) return;
+        clearErrors(); // Clear previous errors
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider)
+            .then((result) => {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                // const credential = result.credential;
+                // const token = credential.accessToken;
+                // The signed-in user info.
+                const user = result.user;
+                console.log('Google Sign-In successful for user:', user.displayName || user.email);
+                // onAuthStateChanged will handle UI update
+            })
+            .catch((error) => {
+                displayAuthError(error, 'google'); // Pass 'google' type
+            });
+    }
+
+
+    // --- Event Listeners ---
+    if (auth) { // Only add listeners if auth initialized successfully
+        if (showSignupLink) {
+            showSignupLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                clearForms();
+                body.classList.remove('form-view--signin');
+                body.classList.add('form-view--signup');
+            });
+        }
+        if (showSigninLink) {
+            showSigninLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                clearForms();
+                body.classList.remove('form-view--signup');
+                body.classList.add('form-view--signin');
+            });
+        }
+        if (signinForm) {
+            signinForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                setFormLoading(true, 'signin');
+                const email = signinEmailInput.value;
+                const password = signinPasswordInput.value;
+                auth.signInWithEmailAndPassword(email, password)
+                    .catch((error) => { displayAuthError(error, 'signin'); })
+                    .finally(() => { setFormLoading(false, 'signin'); });
+            });
+        }
+        if (signupForm) {
+            signupForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (!signupForm.checkValidity()) { // Basic HTML5 validation check
+                     signupForm.reportValidity();
+                     return;
+                 }
+                setFormLoading(true, 'signup');
+                const email = signupEmailInput.value;
+                const password = signupPasswordInput.value;
+                auth.createUserWithEmailAndPassword(email, password)
+                    .catch((error) => { displayAuthError(error, 'signup'); })
+                    .finally(() => { setFormLoading(false, 'signup'); });
+            });
+        }
+
+        // Google Sign-In Listeners
+        if (googleSigninButton) {
+            googleSigninButton.addEventListener('click', handleGoogleSignIn);
+        }
+         if (googleSignupButton) { // Use the same handler for sign up button
+            googleSignupButton.addEventListener('click', handleGoogleSignIn);
+        }
+
+        // Sign Out Listener
+        if (signoutButton) {
+             signoutButton.addEventListener('click', () => {
+                 auth.signOut().catch((error) => {
+                     console.error('Sign out error:', error);
+                     alert('Error signing out. Please try again.'); // Simple alert for signout error
+                 });
+             });
+        }
+
+        // --- Auth State Observer ---
+        auth.onAuthStateChanged((user) => {
+            clearForms(); // Clear forms on any auth state change
+            if (user) {
+                // User is signed in
+                console.log('Auth state changed: Logged In as', user.email || user.displayName);
+                body.classList.remove('auth-state--logged-out');
+                body.classList.add('auth-state--logged-in');
+                body.classList.remove('form-view--signup'); // Reset form view state
+                body.classList.add('form-view--signin');
+            } else {
+                // User is signed out
+                console.log('Auth state changed: Logged Out');
+                body.classList.remove('auth-state--logged-in');
+                body.classList.add('auth-state--logged-out');
+                body.classList.remove('form-view--signup'); // Default to signin view on logout
+                body.classList.add('form-view--signin');
+             }
+        });
+
+    } else { // Fallback if auth failed to initialize
+         console.warn('Auth service not available. Displaying logged-out state.');
+         body.className = 'auth-state--logged-out form-view--signin'; // Ensure default state
+         // Hide elements that require auth
+          if(mainIframe) mainIframe.style.display = 'none';
+          if(signoutButton) signoutButton.style.display = 'none';
+    }
+
+</script>
+
 </body>
 </html>
